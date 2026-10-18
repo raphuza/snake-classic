@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jogo da Cobra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Pixelify+Sans:wght@400;600&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="jogo">
+    <h1>Jogo da Cobra</h1>
+
+    <div class="aparelho">
+      <div class="tela">
+        <div class="placar">
+          <span class="placar-item">
+            <span class="placar-rotulo">Pontos</span>
+            <span id="pontos" class="placar-valor">0000</span>
+          </span>
+          <span class="placar-item">
+            <span class="placar-rotulo">Recorde</span>
+            <span id="recorde" class="placar-valor">0000</span>
+          </span>
+        </div>
+        <canvas id="tabuleiro" width="400" height="400"></canvas>
+      </div>
+    </div>
+
+    <div class="instrucoes">
+      <ul class="teclas">
+        <li><span class="grupo"><kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd></span> ou <span class="grupo"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span> movem a cobra</li>
+        <li><kbd class="larga">Espaço</kbd> começa e pausa</li>
+        <li><kbd class="larga">Enter</kbd> joga de novo no fim</li>
+      </ul>
+      <p class="toque">Deslize na tela para virar. Toque para começar e pausar.</p>
+      <p class="regra">Sem paredes: saia por uma borda e volte pela outra. Só não morda o próprio corpo.</p>
+    </div>
+  </main>
+
+  <script src="jogo.js"></script>
+</body>
+</html>
