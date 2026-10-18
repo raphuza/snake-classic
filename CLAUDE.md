@@ -16,15 +16,20 @@ There is no test suite. The game logic is exported for Node when `module` exists
 
 ```bash
 node -e "const j = require('./jogo.js'); console.log(j.envolver({x: 20, y: -1}))"
+node -e "const j = require('./jogo.js'); console.log(j.passo(j.criarEstadoInicial()))"
 ```
 
+Exports: `envolver`, `gerarComida`, `criarEstadoInicial`, `passo`, `velocidade`, `DIRECOES`, `COLUNAS`, `LINHAS`. `gerarComida(cobra, aleatorio)` takes an optional RNG, so food placement can be made deterministic in checks.
+
 ## Architecture (`jogo.js`)
+
+Tunables (board size, cell size, initial/max speed, storage key) are constants at the top of `jogo.js`.
 
 - **Pure functions, no DOM:** `envolver` (wall wrap), `gerarComida` (random free cell, `null` when the board is full), `criarEstadoInicial`, and `passo(estado)`, which returns a *new* state: it moves, eats/grows, scores, and detects self-collision. When the snake doesn't eat, the tail cell is excluded from the collision check, because the tail moves away on that same step.
 - **Direction buffering:** key presses go into `filaDirecoes` (DOM layer, max 2). Before each step the loop moves one into `proximaDirecao`, and `passo` copies that into `direcao`. Each key is checked for reversal against the last queued direction (or the applied `direcao`), so a quick two-key turn keeps both keys but can't make a 180° turn.
 - **DOM layer** (inside `if (typeof document !== "undefined")`): a `requestAnimationFrame` loop with a time accumulator calls `passo` at `velocidade(pontos)` steps per second, which speeds up every 5 points. Frame time is capped at `DELTA_MAXIMO`, and the game pauses when the tab is hidden. `situacao` is `"parado" | "jogando" | "pausado" | "fim"` and drives the canvas overlays; `venceu` marks a full board. Space starts, pauses, or restarts; Enter restarts only in `"fim"`. Key repeats and Ctrl/Meta/Alt combos are ignored. Swipe/tap work on touch screens.
 - **High score:** stored in `localStorage` under `cobra.recorde`, wrapped in try/catch. It is updated live in `atualizarPlacar()`, which re-reads storage before saving, and a `storage` listener picks up records from other tabs.
-- Canvas colors are in the `CORES` constant in `jogo.js`; page colors are CSS variables in `style.css`. Keep the two in sync and keep the theme light.
+- Canvas colors are in the `CORES` constant in `jogo.js`; page colors are CSS variables in `style.css`. Keep the two in sync and keep the theme light. Fonts (Pixelify Sans, Atkinson Hyperlegible) load from Google Fonts in `index.html`; the canvas font stack is `FONTE_TELA`, with monospace fallbacks for offline use.
 
 ## Conventions
 
